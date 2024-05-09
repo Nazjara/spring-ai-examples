@@ -1,5 +1,9 @@
 package com.nazjara.service;
 
+import com.nazjara.model.Answer;
+import com.nazjara.model.Question;
+
 public interface OpenAIService {
-	String getAnswer(String question);
+	Answer getAnswer(Question question);
+	Answer getCapital(String country);
 }
