@@ -23,6 +23,9 @@ public class OpenAIServiceImpl implements OpenAIService {
 	@Value("classpath:templates/get-capital-prompt.st")
 	private Resource getCapitalPrompt;
 
+	@Value("classpath:templates/get-capital-extended-prompt.st")
+	private Resource getCapitalExtendedPrompt;
+
 	@Override
 	public Answer getAnswer(Question question) {
 		var promptTemplate = new PromptTemplate(question.question());
@@ -31,8 +34,8 @@ public class OpenAIServiceImpl implements OpenAIService {
 	}
 
 	@Override
-	public Answer getCapital(String country) {
-		var promptTemplate = new PromptTemplate(getCapitalPrompt);
+	public Answer getCapital(String country, boolean extended) {
+		var promptTemplate = extended ? new PromptTemplate(getCapitalExtendedPrompt) : new PromptTemplate(getCapitalPrompt);
 		var prompt = promptTemplate.create(Map.of("country", country));
 		return new Answer(this.getAnswer(prompt));
 	}

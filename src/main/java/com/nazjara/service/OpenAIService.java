@@ -5,5 +5,5 @@ import com.nazjara.model.Question;
 
 public interface OpenAIService {
 	Answer getAnswer(Question question);
-	Answer getCapital(String country);
+	Answer getCapital(String country, boolean extended);
 }

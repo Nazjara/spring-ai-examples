@@ -1,6 +1,5 @@
 # AI Test Prompts
-These test prompts were developed by [Mathew Berman](https://www.matthewberman.com/) to test the capabilities of
-different AI models.
+These test prompts were developed by [Mathew Berman](https://www.matthewberman.com/) to test the capabilities of different AI models.
 
 ## Prompt 1
 `Write a python script to output numbers from 1 to 100.`

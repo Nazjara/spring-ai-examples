@@ -20,7 +20,7 @@ public class QuestionController {
 	}
 
 	@GetMapping("/capital")
-	public Answer getCapital(@RequestParam String country) {
-		return openAIService.getCapital(country);
+	public Answer getCapital(@RequestParam String country, @RequestParam boolean extended) {
+		return openAIService.getCapital(country, extended);
 	}
 }
