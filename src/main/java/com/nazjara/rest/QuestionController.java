@@ -1,6 +1,7 @@
 package com.nazjara.rest;
 
 import com.nazjara.model.Answer;
+import com.nazjara.model.GetCapitalResponse;
 import com.nazjara.model.Question;
 import com.nazjara.service.OpenAIService;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class QuestionController {
 	}
 
 	@GetMapping("/capital")
-	public Answer getCapital(@RequestParam String country, @RequestParam boolean extended) {
+	public GetCapitalResponse getCapital(@RequestParam String country, @RequestParam boolean extended) {
 		return openAIService.getCapital(country, extended);
 	}
 }
