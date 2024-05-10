@@ -13,8 +13,13 @@
     <groupId>com.nazjara</groupId>
     <artifactId>spring-ai-examples</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
     <name>spring-ai-examples</name>
     <description>spring-ai-examples</description>
+
+    <modules>
+        <module>basics</module>
+    </modules>
 
     <properties>
         <java.version>21</java.version>
