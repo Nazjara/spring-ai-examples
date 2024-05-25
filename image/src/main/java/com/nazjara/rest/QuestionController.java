@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 import static org.springframework.util.MimeTypeUtils.IMAGE_PNG_VALUE;
@@ -26,7 +28,7 @@ public class QuestionController {
 	}
 
 	@PostMapping(value = "/vision", consumes = MULTIPART_FORM_DATA_VALUE, produces = APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> upload(@RequestParam MultipartFile file, @RequestParam String name) {
+	public ResponseEntity<String> upload(@RequestParam MultipartFile file) throws IOException {
 		return ResponseEntity.ok(openAIService.getDescription(file));
 	}
 }
