@@ -2,7 +2,6 @@ package com.nazjara;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.autoconfigure.openai.OpenAiChatProperties;
-import org.springframework.ai.chat.ChatResponse;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,10 +23,10 @@ public class ChainOfThoughtTest extends BaseTestClass {
 
 		PromptTemplate promptTemplate = new PromptTemplate(prompt);
 
-		ChatResponse response = openAiChatClient.call(promptTemplate.create());
+		var response = chatClientBuilder.build().prompt(promptTemplate.create()).call();
 
 		//models previously would answer 27
-		System.out.println(response.getResult().getOutput().getContent());
+		System.out.println(response.content());
 	}
 
 	@Test
@@ -44,9 +43,9 @@ public class ChainOfThoughtTest extends BaseTestClass {
 
 		PromptTemplate promptTemplate = new PromptTemplate(chainOfThoughtPrompt);
 
-		ChatResponse response = openAiChatClient.call(promptTemplate.create());
+		var response = chatClientBuilder.build().prompt(promptTemplate.create()).call();
 
-		System.out.println(response.getResult().getOutput().getContent());
+		System.out.println(response.content());
 	}
 
 	@Test
@@ -58,9 +57,9 @@ public class ChainOfThoughtTest extends BaseTestClass {
 
 		PromptTemplate promptTemplate = new PromptTemplate(prompt);
 
-		ChatResponse response = openAiChatClient.call(promptTemplate.create());
+		var response = chatClientBuilder.build().prompt(promptTemplate.create()).call();
 
 		//models previously would answer 27
-		System.out.println(response.getResult().getOutput().getContent());
+		System.out.println(response.content());
 	}
 }

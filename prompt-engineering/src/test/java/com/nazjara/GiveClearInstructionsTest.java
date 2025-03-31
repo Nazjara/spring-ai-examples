@@ -74,14 +74,14 @@ public class GiveClearInstructionsTest extends BaseTestClass {
 	void testCookSteak() {
 		PromptTemplate promptTemplate = new PromptTemplate(directionsPrompt, Map.of("text_1", cookASteak));
 
-		System.out.println(openAiChatClient.call(promptTemplate.create()).getResult().getOutput().getContent());
+		System.out.println(chatClientBuilder.build().prompt(promptTemplate.create()).call().content());
 	}
 
 	@Test
 	void testBookDescription() {
 		PromptTemplate promptTemplate = new PromptTemplate(directionsPrompt, Map.of("text_1", bookDescription));
 
-		System.out.println(openAiChatClient.call(promptTemplate.create()).getResult().getOutput().getContent());
+		System.out.println(chatClientBuilder.build().prompt(promptTemplate.create()).call().content());
 	}
 
 	@Test
@@ -89,7 +89,7 @@ public class GiveClearInstructionsTest extends BaseTestClass {
 		PromptTemplate promptTemplate = new PromptTemplate(directionsPrompt + "Give the directions using the tone of Snoop Dog",
 			Map.of("text_1", cookASteak));
 
-		System.out.println(openAiChatClient.call(promptTemplate.create()).getResult().getOutput().getContent());
+		System.out.println(chatClientBuilder.build().prompt(promptTemplate.create()).call().content());
 	}
 
 	@Test
@@ -97,6 +97,6 @@ public class GiveClearInstructionsTest extends BaseTestClass {
 		PromptTemplate promptTemplate = new PromptTemplate(directionsPrompt + "Give the directions using the tone, tools and imagination of JK Rowling in a Harry Potter book",
 			Map.of("text_1", cookASteak));
 
-		System.out.println(openAiChatClient.call(promptTemplate.create()).getResult().getOutput().getContent());
+		System.out.println(chatClientBuilder.build().prompt(promptTemplate.create()).call().content());
 	}
 }

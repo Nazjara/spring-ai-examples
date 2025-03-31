@@ -37,7 +37,7 @@ public class MakingTheModelThinkTest extends BaseTestClass {
 		PromptTemplate promptTemplate = new PromptTemplate(prompt ,
 			Map.of("text", story));
 
-		System.out.println(openAiChatClient.call(promptTemplate.create()).getResult().getOutput().getContent());
+		System.out.println(chatClientBuilder.build().prompt(promptTemplate.create()).call().content());
 
 	}
 
@@ -68,7 +68,7 @@ public class MakingTheModelThinkTest extends BaseTestClass {
 	void testIncorrectPrompt() {
 		PromptTemplate promptTemplate = new PromptTemplate(prompt2Incorrect);
 
-		System.out.println(openAiChatClient.call(promptTemplate.create()).getResult().getOutput().getContent());
+		System.out.println(chatClientBuilder.build().prompt(promptTemplate.create()).call().content());
 	}
 
 	String prompt3Correct = """
@@ -124,7 +124,7 @@ public class MakingTheModelThinkTest extends BaseTestClass {
 	void testCorrectPrompt() {
 		PromptTemplate promptTemplate = new PromptTemplate(prompt3Correct);
 
-		System.out.println(openAiChatClient.call(promptTemplate.create()).getResult().getOutput().getContent());
+		System.out.println(chatClientBuilder.build().prompt(promptTemplate.create()).call().content());
 	}
 
 	String prompt4 = """
@@ -140,7 +140,7 @@ public class MakingTheModelThinkTest extends BaseTestClass {
 	void testTheBallPrompt() {
 		PromptTemplate promptTemplate = new PromptTemplate(prompt4);
 
-		System.out.println(openAiChatClient.call(promptTemplate.create()).getResult().getOutput().getContent());
+		System.out.println(chatClientBuilder.build().prompt(promptTemplate.create()).call().content());
 	}
 
 }

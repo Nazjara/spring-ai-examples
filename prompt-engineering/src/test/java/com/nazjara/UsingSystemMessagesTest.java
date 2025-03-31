@@ -28,7 +28,7 @@ public class UsingSystemMessagesTest extends BaseTestClass {
 
 		Prompt prompt = new Prompt(messages);
 
-		System.out.println(openAiChatClient.call(prompt).getResult().getOutput().getContent());
+		System.out.println(chatClientBuilder.build().prompt(prompt).call().content());
 	}
 
 	@Test
@@ -48,7 +48,7 @@ public class UsingSystemMessagesTest extends BaseTestClass {
 
 		Prompt prompt = new Prompt(messages);
 
-		System.out.println(openAiChatClient.call(prompt).getResult().getOutput().getContent());
+		System.out.println(chatClientBuilder.build().prompt(prompt).call().content());
 	}
 
 	String cookASteak = """
@@ -78,7 +78,7 @@ public class UsingSystemMessagesTest extends BaseTestClass {
 
 		Prompt prompt = new Prompt(messages);
 
-		System.out.println(openAiChatClient.call(prompt).getResult().getOutput().getContent());
+		System.out.println(chatClientBuilder.build().prompt(prompt).call().content());
 	}
 
 	@Test
@@ -98,6 +98,6 @@ public class UsingSystemMessagesTest extends BaseTestClass {
 
 		Prompt prompt = new Prompt(messages);
 
-		System.out.println(openAiChatClient.call(prompt).getResult().getOutput().getContent());
+		System.out.println(chatClientBuilder.build().prompt(prompt).call().content());
 	}
 }

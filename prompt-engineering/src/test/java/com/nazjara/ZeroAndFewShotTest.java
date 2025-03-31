@@ -1,15 +1,13 @@
 package com.nazjara;
 
+import java.util.Map;
+import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.autoconfigure.openai.OpenAiChatProperties;
-import org.springframework.ai.chat.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Map;
-import java.util.UUID;
 
 public class ZeroAndFewShotTest extends BaseTestClass {
 
@@ -39,33 +37,32 @@ public class ZeroAndFewShotTest extends BaseTestClass {
 			PromptTemplate promptTemplate = new PromptTemplate(prompt,
 				Map.of("review", UUID.randomUUID() + "\n" + review));
 
-			ChatResponse response = openAiChatClient.call(promptTemplate.create());
+			var response = chatClientBuilder.build().prompt(promptTemplate.create());
 
 			System.out.println("#################################\n");
-			System.out.println(response.getResult().getOutput().getContent());
+			System.out.println(response.call().content());
 		}
 	}
 
 	@Test
 	void zeroShotPromptTestWithModelOptions() {
-
-		OpenAiChatOptions openAiChatOptions = new OpenAiChatOptions.Builder(openAiChatProperties.getOptions())
-			.withTemperature(0.1f) //default is 0.7
-			.withModel("gpt-4-turbo-preview")
+		var openAiChatOptions = new OpenAiChatOptions.Builder(openAiChatProperties.getOptions())
+			.temperature(0.1) //default is 0.7
+			.model("gpt-4o-mini")
 			.build();
 
 		// java for loop 3 times
 		for (int i = 0; i < 3; i++) {
 			// java UUID randomUUID is an API cache buster
-			PromptTemplate promptTemplate = new PromptTemplate(prompt,
+			var promptTemplate = new PromptTemplate(prompt,
 				Map.of("review" , UUID.randomUUID() + "\n" + review));
 
-			Prompt prompt = new Prompt(promptTemplate.createMessage(), openAiChatOptions);
+			var prompt = new Prompt(promptTemplate.createMessage(), openAiChatOptions);
 
-			ChatResponse response = openAiChatClient.call(prompt);
+			var response = chatClientBuilder.build().prompt(prompt);
 
 			System.out.println("#################################\n");
-			System.out.println(response.getResult().getOutput().getContent());
+			System.out.println(response.call().content());
 		}
 	}
 
@@ -88,7 +85,7 @@ public class ZeroAndFewShotTest extends BaseTestClass {
 	void testwhatPuPromptFewShotTest() {
 		PromptTemplate promptTemplate = new PromptTemplate(whatpuPrompt);
 
-		System.out.println(openAiChatClient.call(promptTemplate.create()).getResult().getOutput().getContent());
+		System.out.println(chatClientBuilder.build().prompt(promptTemplate.create()).call().content());
 	}
 
 	String vacationPrompt = """
@@ -101,7 +98,7 @@ public class ZeroAndFewShotTest extends BaseTestClass {
 	void testVacationFewShotTest() {
 		PromptTemplate promptTemplate = new PromptTemplate(vacationPrompt);
 
-		System.out.println(openAiChatClient.call(promptTemplate.create()).getResult().getOutput().getContent());
+		System.out.println(chatClientBuilder.build().prompt(promptTemplate.create()).call().content());
 	}
 
 	String mathPrompt = """
@@ -116,7 +113,7 @@ public class ZeroAndFewShotTest extends BaseTestClass {
 	void testMathPromptFewShotTest() {
 		PromptTemplate promptTemplate = new PromptTemplate(mathPrompt);
 
-		System.out.println(openAiChatClient.call(promptTemplate.create()).getResult().getOutput().getContent());
+		System.out.println(chatClientBuilder.build().prompt(promptTemplate.create()).call().content());
 	}
 
 	@Test
@@ -124,6 +121,6 @@ public class ZeroAndFewShotTest extends BaseTestClass {
 		Prompt prompt = new Prompt("Write sales copy for the new 'professional grade' " +
 			"Denali Advanced Toothbrush by GMC.");
 
-		System.out.println(openAiChatClient.call(prompt).getResult().getOutput().getContent());
+		System.out.println(chatClientBuilder.build().prompt(prompt).call().content());
 	}
 }

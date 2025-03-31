@@ -44,7 +44,7 @@ public class SummarizingPromptsTest extends BaseTestClass {
 		PromptTemplate promptTemplate = new PromptTemplate(reviewPrompt,
 			Map.of("review", review1));
 
-		System.out.println(openAiChatClient.call(promptTemplate.create()).getResult().getOutput().getContent());
+		System.out.println(chatClientBuilder.build().prompt(promptTemplate.create()).call().content());
 	}
 
 	String review2 = """
@@ -84,7 +84,7 @@ public class SummarizingPromptsTest extends BaseTestClass {
 		PromptTemplate promptTemplate = new PromptTemplate(reviewPrompt3,
 			Map.of("review", review1, "review2", review2, "review3", review3));
 
-		System.out.println(openAiChatClient.call(promptTemplate.create()).getResult().getOutput().getContent());
+		System.out.println(chatClientBuilder.build().prompt(promptTemplate.create()).call().content());
 	}
 
 	String reviewPrompt4 = """
@@ -106,6 +106,6 @@ public class SummarizingPromptsTest extends BaseTestClass {
 		PromptTemplate promptTemplate = new PromptTemplate(reviewPrompt4,
 			Map.of("review", review1, "review2", review2, "review3", review3));
 
-		System.out.println(openAiChatClient.call(promptTemplate.create()).getResult().getOutput().getContent());
+		System.out.println(chatClientBuilder.build().prompt(promptTemplate.create()).call().content());
 	}
 }
