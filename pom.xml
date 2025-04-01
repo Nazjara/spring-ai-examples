@@ -23,6 +23,7 @@
         <module>rag</module>
         <module>functions</module>
         <module>image</module>
+        <module>audio</module>
     </modules>
 
     <properties>
