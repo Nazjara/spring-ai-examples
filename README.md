@@ -83,6 +83,20 @@ Features:
 - Text-to-speech with OpenAI's `gpt-4o-mini-tts`
 - Voice customization
 
+### Chat Memory
+
+Multi-turn chat that remembers the conversation, with two memory strategies side by side (`{memoryType}` = `window` or `vector`):
+
+- **window** — `MessageChatMemoryAdvisor` + JDBC-backed `MessageWindowChatMemory`. Every request resends the last 20 messages as chat history; older ones are dropped.
+- **vector** — `VectorStoreChatMemoryAdvisor` + PgVector with local ONNX embeddings. Every message is kept forever; each request retrieves only the 6 past messages most similar to the new question and adds them to the system prompt.
+
+Features:
+- Per-conversation IDs (required by Spring AI 2.0); `window` IDs are max 36 characters — UUIDs fit
+- Streaming responses (Server-Sent Events)
+- `SimpleLoggerAdvisor` logs the full request sent to the model — compare the two strategies in the console
+
+PostgreSQL (with pgvector) is started automatically from `chat-memory/docker-compose.yml` by Spring Boot's Docker Compose support when run with `spring-boot:run` (Docker required).
+
 ## Usage
 
 Each module can be run independently:
@@ -162,4 +176,22 @@ Content-Type: application/json
 {
   "question": "Hello, this is a test of the text-to-speech functionality."
 }
+```
+
+### Chat Memory
+
+```
+POST /chat/{memoryType}/{conversationId}
+Content-Type: application/json
+
+{
+  "question": "Hi, my name is Nazar"
+}
+```
+
+```
+POST /chat/{memoryType}/{conversationId}/stream   # same body, streamed as text/event-stream
+GET /chat/window/{conversationId}                 # window: the history resent on each request
+GET /chat/vector/{conversationId}?query=name      # vector: what would be recalled for this query
+DELETE /chat/{memoryType}/{conversationId}        # forget the conversation
 ```

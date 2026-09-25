@@ -21,6 +21,7 @@ Root `pom.xml` is the parent: Spring Boot parent, Spring AI BOM (`spring-ai.vers
 | `functions` | `POST /weather` | `FunctionToolCallback` wrapping `WeatherServiceFunction` (api-ninjas) |
 | `image` | `POST /image`, `POST /vision` (multipart) | `OpenAiImageModel` (generation); Claude via `ChatClient` + `Media` (vision) |
 | `audio` | `POST /audio` | `TextToSpeechModel` (OpenAI `gpt-4o-mini-tts`) |
+| `chat-memory` | `POST /chat/{window\|vector}/{id}` (+ `/stream` SSE), `GET /chat/window/{id}`, `GET /chat/vector/{id}?query=`, `DELETE /chat/{type}/{id}` | `MessageChatMemoryAdvisor` over `JdbcChatMemoryRepository` vs `VectorStoreChatMemoryAdvisor` over PgVector + local ONNX embeddings; `SimpleLoggerAdvisor` at DEBUG. Postgres via Boot Docker Compose — only with `spring-boot:run`; the pgvector image needs the `org.springframework.boot.service-connection=postgres` label |
 
 Package convention per module (`com.nazjara`): `rest/QuestionController`, `service/AiService` + `AiServiceImpl`, `model/` records (`Question`, `Answer`), `configuration/`, `bootstrap/`.
 

@@ -1,0 +1,12 @@
+services:
+  postgres:
+    container_name: chat-memory-postgres
+    image: pgvector/pgvector:pg17
+    labels:
+      - org.springframework.boot.service-connection=postgres
+    environment:
+      - POSTGRES_DB=chatmemory
+      - POSTGRES_USER=chatmemory
+      - POSTGRES_PASSWORD=chatmemory
+    ports:
+      - "5432"
