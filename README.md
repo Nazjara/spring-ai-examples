@@ -33,7 +33,8 @@ Demonstrates basic usage of Spring AI for text generation.
 
 Features:
 - Simple question answering
-- Structured output generation
+- Prompt templates (`.st` files with variables)
+- Structured output with `ChatClient.entity(...)`: a single record, a richer typed record, and a `List` via `ParameterizedTypeReference`
 
 ### Prompt Engineering
 
@@ -122,7 +123,9 @@ Content-Type: application/json
 ```
 
 ```
-GET /capital?country=France&extended=true
+GET /capital?country=France
+GET /capital/details?country=France
+GET /capitals?region=Scandinavia
 ```
 
 ### RAG

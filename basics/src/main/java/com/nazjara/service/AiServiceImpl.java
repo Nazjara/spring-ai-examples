@@ -1,14 +1,13 @@
 package com.nazjara.service;
 
 import com.nazjara.model.Answer;
+import com.nazjara.model.CapitalDetails;
 import com.nazjara.model.GetCapitalResponse;
 import com.nazjara.model.Question;
-import java.util.Map;
+import java.util.List;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.chat.prompt.PromptTemplate;
-import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
@@ -24,27 +23,38 @@ public class AiServiceImpl implements AiService {
 	@Value("classpath:templates/get-capital-prompt.st")
 	private Resource getCapitalPrompt;
 
-	@Value("classpath:templates/get-capital-extended-prompt.st")
-	private Resource getCapitalExtendedPrompt;
+	@Value("classpath:templates/get-capital-details-prompt.st")
+	private Resource getCapitalDetailsPrompt;
+
+	@Value("classpath:templates/get-capitals-prompt.st")
+	private Resource getCapitalsPrompt;
 
 	@Override
 	public Answer getAnswer(Question question) {
-		var promptTemplate = new PromptTemplate(question.question());
-		var prompt = promptTemplate.create();
-		return new Answer(this.getAnswer(prompt));
+		return new Answer(chatClient.prompt().user(question.question()).call().content());
 	}
 
 	@Override
-	public GetCapitalResponse getCapital(String country, boolean extended) {
-		var converter = new BeanOutputConverter<>(GetCapitalResponse.class);
-		var format = converter.getFormat();
-
-		var promptTemplate = extended ? new PromptTemplate(getCapitalExtendedPrompt) : new PromptTemplate(getCapitalPrompt);
-		var prompt = promptTemplate.create(Map.of("country", country, "format", format));
-		return converter.convert(getAnswer(prompt));
+	public GetCapitalResponse getCapital(String country) {
+		return chatClient.prompt()
+			.user(u -> u.text(getCapitalPrompt).param("country", country))
+			.call()
+			.entity(GetCapitalResponse.class);
 	}
 
-	private String getAnswer(Prompt prompt) {
-		return chatClient.prompt(prompt).call().content();
+	@Override
+	public CapitalDetails getCapitalDetails(String country) {
+		return chatClient.prompt()
+			.user(u -> u.text(getCapitalDetailsPrompt).param("country", country))
+			.call()
+			.entity(CapitalDetails.class);
+	}
+
+	@Override
+	public List<CapitalDetails> getCapitals(String region) {
+		return chatClient.prompt()
+			.user(u -> u.text(getCapitalsPrompt).param("region", region))
+			.call()
+			.entity(new ParameterizedTypeReference<>() {});
 	}
 }

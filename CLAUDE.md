@@ -15,7 +15,7 @@ Root `pom.xml` is the parent: Spring Boot parent, Spring AI BOM (`spring-ai.vers
 
 | Module | Entry points | Spring AI surface |
 |---|---|---|
-| `basics` | `POST /ask`, `GET /capital?country=&extended=` | `ChatClient`, `PromptTemplate` (`templates/*.st`), `BeanOutputConverter` |
+| `basics` | `POST /ask`, `GET /capital?country=`, `GET /capital/details?country=`, `GET /capitals?region=` | `ChatClient`, `.st` templates via `.user(u -> u.text(resource).param(...))`, structured output via `.entity(...)` (record, `ParameterizedTypeReference<List<…>>`) |
 | `prompt-engineering` | none — JUnit tests only | `ChatClient` via `BaseTestClass.chat(...)` |
 | `rag` | `POST /ask` | `VectorStore` (`SimpleVectorStore` default, Milvus under `prod`), local ONNX `EmbeddingModel` (all-MiniLM-L6-v2, 384 dims), `TikaDocumentReader`, `TokenTextSplitter` |
 | `functions` | `POST /weather` | `FunctionToolCallback` wrapping `WeatherServiceFunction` (api-ninjas) |
