@@ -15,6 +15,19 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
+/**
+ * {@link AiService} implementing RAG by hand, so each step is visible:
+ * <ol>
+ *   <li>{@link VectorStore#similaritySearch} embeds the question (local ONNX model) and
+ *       returns the 4 closest document chunks.</li>
+ *   <li>The chunks are pasted into {@code template/rag-prompt-template.st} together with
+ *       the question.</li>
+ *   <li>The system message ({@code template/system-message.st}) tells the model to answer
+ *       only from those chunks.</li>
+ * </ol>
+ * Spring AI also ships {@code QuestionAnswerAdvisor}, which does the same in one line;
+ * this class keeps the steps explicit for learning.
+ */
 @Service
 public class AiServiceImpl implements AiService {
 

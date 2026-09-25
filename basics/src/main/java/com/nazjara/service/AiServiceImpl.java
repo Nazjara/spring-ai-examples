@@ -11,6 +11,19 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
+/**
+ * {@link AiService} backed by a {@link ChatClient}.
+ *
+ * <p>How structured output works here: {@code .call().entity(Type.class)} generates a JSON
+ * schema from the target type (field names, types and {@code @JsonPropertyDescription}
+ * texts), appends "respond with JSON matching this schema" to the prompt, and parses the
+ * reply back into {@code Type}. For generic types such as {@code List<CapitalDetails>},
+ * a {@link ParameterizedTypeReference} carries the type information that erasure would
+ * otherwise lose.
+ *
+ * <p>Prompts live in {@code src/main/resources/templates/*.st} (StringTemplate syntax);
+ * {@code {country}} / {@code {region}} are filled in via {@code .param(...)}.
+ */
 @Service
 public class AiServiceImpl implements AiService {
 

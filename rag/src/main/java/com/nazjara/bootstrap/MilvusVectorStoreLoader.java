@@ -10,6 +10,13 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+/**
+ * Ingests the configured documents into Milvus on startup ({@code prod} profile only).
+ *
+ * <p>Uses the same read → split → embed pipeline as {@code VectorStoreConfig}, but writes to
+ * the Milvus vector store auto-configured by Spring AI. Ingestion is skipped when a probe
+ * search already returns results.
+ */
 @Profile("prod")
 @Component
 @Slf4j

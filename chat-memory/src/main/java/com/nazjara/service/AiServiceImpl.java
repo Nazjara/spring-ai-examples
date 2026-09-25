@@ -18,6 +18,23 @@ import org.springframework.ai.vectorstore.filter.FilterExpressionBuilder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
+/**
+ * {@link AiService} with one {@link ChatClient} per {@link MemoryType}; each has a
+ * different memory advisor. Advisors wrap every call: they can change the request before
+ * it reaches the model and see the response afterwards.
+ * <ul>
+ *   <li>{@link MessageChatMemoryAdvisor} (window): loads the conversation from
+ *       {@link ChatMemory} and adds it as chat history, then saves the new question and
+ *       answer.</li>
+ *   <li>{@link VectorStoreChatMemoryAdvisor} (vector): searches the {@link VectorStore}
+ *       for the {@code VECTOR_MEMORY_TOP_K} (6) past messages most similar to the new
+ *       question and adds them to the system prompt, then stores the new messages as
+ *       vectors.</li>
+ *   <li>{@link SimpleLoggerAdvisor}: logs the final request at DEBUG, so the difference
+ *       between the two strategies is visible in the console.</li>
+ * </ul>
+ * The conversation id is passed per request via {@link ChatMemory#CONVERSATION_ID}.
+ */
 @Service
 public class AiServiceImpl implements AiService {
 
@@ -86,6 +103,11 @@ public class AiServiceImpl implements AiService {
 			.advisors(a -> a.param(ChatMemory.CONVERSATION_ID, conversationId));
 	}
 
+	/**
+	 * Builds a typed vector-store filter for one conversation's messages. The advisor tags
+	 * every stored message with a {@code conversationId} metadata key. The builder escapes the
+	 * value, unlike string concatenation, which would allow filter injection.
+	 */
 	private static Filter.Expression conversationFilter(String conversationId) {
 		return new FilterExpressionBuilder().eq("conversationId", conversationId).build();
 	}

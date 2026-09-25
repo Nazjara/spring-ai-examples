@@ -9,6 +9,13 @@ import org.springframework.ai.openai.OpenAiAudioSpeechOptions.AudioResponseForma
 import org.springframework.ai.openai.OpenAiAudioSpeechOptions.Voice;
 import org.springframework.stereotype.Service;
 
+/**
+ * {@link AiService} backed by the provider-neutral {@link TextToSpeechModel}, here
+ * implemented by OpenAI {@code gpt-4o-mini-tts} (Anthropic has no TTS API).
+ *
+ * <p>{@link OpenAiAudioSpeechOptions} choose the voice, speed and format; {@code instructions}
+ * steer the delivery style, which newer TTS models support.
+ */
 @Service
 @RequiredArgsConstructor
 public class AiServiceImpl implements AiService {

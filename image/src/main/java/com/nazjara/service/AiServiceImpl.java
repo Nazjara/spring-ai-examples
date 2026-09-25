@@ -14,6 +14,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * {@link AiService} using two providers side by side:
+ * <ul>
+ *   <li>Generation — {@link OpenAiImageModel} (DALL·E 3); Anthropic has no image
+ *       generation API. The image comes back Base64-encoded and is decoded to bytes.</li>
+ *   <li>Understanding — Claude via {@link ChatClient}: the image travels as
+ *       {@link Media} attached to a {@link UserMessage}, next to the text prompt.</li>
+ * </ul>
+ * With both starters on the classpath, {@code spring.ai.model.chat=anthropic} picks which
+ * provider backs {@link ChatClient}.
+ */
 @Service
 public class AiServiceImpl implements AiService {
 

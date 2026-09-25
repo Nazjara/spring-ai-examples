@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.nazjara.service.AiService;
 
+/**
+ * REST entry point for the tool-calling example.
+ */
 @RestController
 public class QuestionController {
 
@@ -16,6 +19,12 @@ public class QuestionController {
 		this.aiService = aiService;
 	}
 
+	/**
+	 * Answers a weather question using the weather tool.
+	 *
+	 * @param question JSON body {@code {"question": "..."}}
+	 * @return the model's answer
+	 */
 	@PostMapping("/weather")
 	public Answer askQuestion(@RequestBody Question question) {
 		return aiService.getAnswer(question);

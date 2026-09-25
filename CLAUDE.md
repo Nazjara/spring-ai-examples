@@ -35,6 +35,7 @@ Package convention per module (`com.nazjara`): `rest/QuestionController`, `servi
 ## Conventions
 
 - Java records for DTOs; Lombok for `@Slf4j` / `@RequiredArgsConstructor`.
+- Educational project: Javadoc every class and public method in the API (`rest/`), service (`service/` interfaces + impls), client (`function/`, external HTTP) and data/config (`configuration/`, `bootstrap/`) layers. Explain *what Spring AI does under the hood* (advisors, tool loop, embeddings, schema generation), not just what the method returns. Models/records don't need it. Verify with `./mvnw javadoc:javadoc -Ddoclint=all,-missing -Dshow=private`.
 - Prompt templates live in `src/main/resources/templates` (or `template` in `rag`) as StringTemplate `.st` files.
 - Model names are set in each module's `application.properties` (`spring.ai.anthropic.chat.model`, no `.options` segment in Spring AI 2.0).
 - With both Anthropic and OpenAI starters on the classpath, select providers via `spring.ai.model.chat=anthropic` / `spring.ai.model.<type>=none` (see `image`, `audio`).

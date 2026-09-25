@@ -7,6 +7,14 @@ import org.springframework.web.client.RestClient;
 
 import java.util.function.Function;
 
+/**
+ * HTTP client for the API Ninjas weather API, shaped as a {@link Function} so it can be
+ * registered as a model tool.
+ *
+ * <p>The model never calls the API directly: it asks Spring AI to invoke this function with
+ * a {@link WeatherRequest}, and the returned {@link WeatherResponse} is sent back to it
+ * as JSON.
+ */
 @Slf4j
 public class WeatherServiceFunction implements Function<WeatherRequest, WeatherResponse> {
 
@@ -24,6 +32,12 @@ public class WeatherServiceFunction implements Function<WeatherRequest, WeatherR
 			}).build();
 	}
 
+	/**
+	 * Fetches the current weather for a city.
+	 *
+	 * @param weatherRequest city and country chosen by the model
+	 * @return current weather as returned by API Ninjas
+	 */
 	@Override
 	public WeatherResponse apply(WeatherRequest weatherRequest) {
 		return restClient.get().uri(uriBuilder -> {

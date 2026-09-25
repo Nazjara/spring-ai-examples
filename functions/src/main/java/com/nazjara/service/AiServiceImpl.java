@@ -14,6 +14,20 @@ import org.springframework.ai.tool.function.FunctionToolCallback;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+/**
+ * {@link AiService} that exposes {@link WeatherServiceFunction} to the model as a tool.
+ *
+ * <p>Flow of one request:
+ * <ol>
+ *   <li>The request carries the tool's name, description and input JSON schema
+ *       (derived from {@link WeatherRequest}).</li>
+ *   <li>The model replies with a tool call instead of text, e.g.
+ *       {@code currentWeather({"city":"Lviv","country":"Ukraine"})}.</li>
+ *   <li>Spring AI's {@code ToolCallingAdvisor} (auto-registered in {@link ChatClient}
+ *       since 2.0) runs the function and sends its JSON result back to the model.</li>
+ *   <li>The model writes the final answer using that result.</li>
+ * </ol>
+ */
 @Service
 public class AiServiceImpl implements AiService {
 

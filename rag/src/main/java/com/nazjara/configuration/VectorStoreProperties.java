@@ -8,6 +8,10 @@ import org.springframework.core.io.Resource;
 
 import java.util.List;
 
+/**
+ * RAG settings bound from {@code ai.rag.*}: where the local vector store file lives
+ * and which documents (classpath or URL) to ingest.
+ */
 @Configuration
 @ConfigurationProperties(prefix = "ai.rag")
 @Getter
