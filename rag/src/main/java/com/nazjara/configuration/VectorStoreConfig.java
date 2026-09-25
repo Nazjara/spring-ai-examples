@@ -2,13 +2,11 @@ package com.nazjara.configuration;
 
 import java.io.File;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.autoconfigure.vectorstore.milvus.MilvusVectorStoreAutoConfiguration;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.reader.tika.TikaDocumentReader;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.ai.vectorstore.SimpleVectorStore;
 import org.springframework.ai.vectorstore.VectorStore;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -16,7 +14,6 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 @Slf4j
 @Profile("!prod")
-@EnableAutoConfiguration(exclude={MilvusVectorStoreAutoConfiguration.class})
 public class VectorStoreConfig {
 
 	@Bean

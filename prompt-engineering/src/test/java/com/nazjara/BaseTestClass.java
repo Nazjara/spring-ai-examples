@@ -1,5 +1,6 @@
 package com.nazjara;
 
+import java.util.Map;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,5 +16,9 @@ public class BaseTestClass {
 		var promptTemplate = new PromptTemplate(prompt);
 		var promptToSend = promptTemplate.create();
 		return chatClientBuilder.build().prompt(promptToSend).call().content();
+	}
+
+	PromptTemplate template(String template, Map<String, ?> variables) {
+		return PromptTemplate.builder().template(template).variables(Map.copyOf(variables)).build();
 	}
 }

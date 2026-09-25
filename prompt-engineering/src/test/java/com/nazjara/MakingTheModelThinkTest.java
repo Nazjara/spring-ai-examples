@@ -34,7 +34,7 @@ public class MakingTheModelThinkTest extends BaseTestClass {
 
 	@Test
 	void testSteps() {
-		PromptTemplate promptTemplate = new PromptTemplate(prompt ,
+		PromptTemplate promptTemplate = template(prompt ,
 			Map.of("text", story));
 
 		System.out.println(chatClientBuilder.build().prompt(promptTemplate.create()).call().content());

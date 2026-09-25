@@ -33,11 +33,11 @@ public class OpenAIServiceImpl implements OpenAIService {
   private Resource ragPromptTemplateDetailed;
 
   @Value("classpath:/template/system-message.st")
-  private Resource systemMessage;
+  private Resource systemMessageTemplate;
 
   @Override
   public Answer getAnswer(Question question) {
-    var systemPromptTemplate = new SystemPromptTemplate(systemMessage);
+    var systemPromptTemplate = new SystemPromptTemplate(systemMessageTemplate);
     var systemMessage = systemPromptTemplate.createMessage();
 
     var documents = vectorStore.similaritySearch(

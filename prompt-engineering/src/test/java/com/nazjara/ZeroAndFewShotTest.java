@@ -3,16 +3,11 @@ package com.nazjara;
 import java.util.Map;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
-import org.springframework.ai.autoconfigure.openai.OpenAiChatProperties;
+import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
-import org.springframework.ai.openai.OpenAiChatOptions;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class ZeroAndFewShotTest extends BaseTestClass {
-
-	@Autowired
-	OpenAiChatProperties openAiChatProperties;
 
 	String review = """
             I get it. Everyone is buying these now after years of not caring about Stanley tumblers because of social media. The problem with viral crap like this is we get caught up in fitting in and jumping on the band wagon that we fail to see what's wrong with a product before buying it.
@@ -34,7 +29,7 @@ public class ZeroAndFewShotTest extends BaseTestClass {
 		// java for loop 3 times
 		for (int i = 0; i < 3; i++) {
 			// java UUID randomUUID is an API cache buster
-			PromptTemplate promptTemplate = new PromptTemplate(prompt,
+			PromptTemplate promptTemplate = template(prompt,
 				Map.of("review", UUID.randomUUID() + "\n" + review));
 
 			var response = chatClientBuilder.build().prompt(promptTemplate.create());
@@ -46,20 +41,15 @@ public class ZeroAndFewShotTest extends BaseTestClass {
 
 	@Test
 	void zeroShotPromptTestWithModelOptions() {
-		var openAiChatOptions = new OpenAiChatOptions.Builder(openAiChatProperties.getOptions())
-			.temperature(0.1) //default is 0.7
-			.model("gpt-4o-mini")
-			.build();
+		var chatOptions = ChatOptions.builder().temperature(0.1); //default is 1.0
 
 		// java for loop 3 times
 		for (int i = 0; i < 3; i++) {
 			// java UUID randomUUID is an API cache buster
-			var promptTemplate = new PromptTemplate(prompt,
+			var promptTemplate = template(prompt,
 				Map.of("review" , UUID.randomUUID() + "\n" + review));
 
-			var prompt = new Prompt(promptTemplate.createMessage(), openAiChatOptions);
-
-			var response = chatClientBuilder.build().prompt(prompt);
+			var response = chatClientBuilder.build().prompt(promptTemplate.create()).options(chatOptions);
 
 			System.out.println("#################################\n");
 			System.out.println(response.call().content());

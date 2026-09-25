@@ -1,14 +1,9 @@
 package com.nazjara;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.ai.autoconfigure.openai.OpenAiChatProperties;
 import org.springframework.ai.chat.prompt.PromptTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class ChainOfThoughtTest extends BaseTestClass {
-
-	@Autowired
-	OpenAiChatProperties openAiChatProperties;
 
 	/*
 	  Chain of thought - adding a series of intermediate reasoning steps to the prompt.
