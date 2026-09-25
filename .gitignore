@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Milvus docker data ###
+rag/volumes/
