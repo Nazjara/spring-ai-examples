@@ -173,6 +173,13 @@ A travel agent over 15 `@Tool` methods (fake, deterministic data — no external
 
 Its tests run **without an API key**: a stub model shows that tool search sends 1 tool definition instead of 15, and walks one iteration of the tool loop.
 
+### Observability & Evaluation
+
+A small café assistant (RAG via `QuestionAnswerAdvisor` + one `@Tool`) used to demonstrate watching and grading an AI app:
+
+- **Tracing** — Spring AI instruments `ChatClient`, advisors, model calls, embeddings and tools; `spring-boot-starter-opentelemetry` exports them to Grafana LGTM (started from `observability-eval/docker-compose.yml` by Boot's Docker Compose support). Call `POST /ask`, then open http://localhost:3000 → Explore → Tempo to see the span tree
+- **Evaluation (LLM-as-a-judge)** — tests grade answers with a stronger model (Sonnet judges Haiku): `RelevancyEvaluator`, `FactCheckingEvaluator`, plus a negative test proving a fabricated answer fails. Skipped unless `ANTHROPIC_API_KEY` is set
+
 ## Usage
 
 Each module can be run independently:
@@ -305,3 +312,15 @@ X-User-Id: alice
 ```
 POST /plan                                          # body {"question": "3 days in Lisbon from 2026-10-10, flying from Kyiv"}; returns a validated TripPlan
 ```
+
+### Observability & Evaluation
+
+```
+POST /ask
+Content-Type: application/json
+
+{
+  "question": "When are you open on Saturday?"
+}
+```
+Returns the answer plus the knowledge-base chunks it was grounded on.

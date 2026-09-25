@@ -25,6 +25,7 @@ Root `pom.xml` is the parent: Spring Boot parent, Spring AI BOM (`spring-ai.vers
 | `mcp-server` | MCP over Streamable HTTP at `:8090/mcp` | `@McpTool` (`tool/`), `@McpResource` (`resource/`), `@McpPrompt` (`prompt/`), `McpSyncRequestContext`; `spring.ai.model.chat=none` (no LLM) |
 | `mcp-agent` | `POST /ask`, `POST /movies/{title}/ask`, `GET /weather-report` | MCP *host*: embedded MCP client (from `spring-ai-starter-mcp-client`) → `ToolCallbackProvider` via `ChatClient.defaultTools(...)`; `McpSyncClient` for resources/prompts. Needs `mcp-server` running |
 | `agentic-tools` | `POST /ask?toolSearch=`, `POST /plan` | 15 fake `@Tool`s (`tool/TravelTools`), `ToolSearchToolCallingAdvisor` + `LuceneToolIndex` (built manually; starter autoconfig disabled), `spring.ai.tools.limits.*`, `ToolContext`, `StructuredOutputValidationAdvisor`. Tests use a stub `ChatModel` — no API key; a stub must return `ToolCallingChatOptions` from `getOptions()` or tools are silently dropped |
+| `observability-eval` | `POST /ask` | `QuestionAnswerAdvisor` over `SimpleVectorStore` (`knowledge/cafe.md`, local ONNX) + `@Tool`; OTel traces → Grafana LGTM on :3000 (Compose, `spring-boot:run` only); `RelevancyEvaluator`/`FactCheckingEvaluator` tests with a Sonnet judge, `@EnabledIfEnvironmentVariable(ANTHROPIC_API_KEY)` |
 
 Package convention per module (`com.nazjara`): `rest/QuestionController`, `service/AiService` + `AiServiceImpl`, `model/` records (`Question`, `Answer`), `configuration/`, `bootstrap/`.
 
