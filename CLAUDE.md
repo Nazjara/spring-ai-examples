@@ -6,7 +6,7 @@ Pet project: multi-module Maven showcase of Spring AI features. Java 25, Spring 
 
 - Build all: `./mvnw clean install` (tests hit live model APIs — use `-DskipTests` when no key/credits). Needs JDK 25: the shell default may be 21, so prefix with `JAVA_HOME=/usr/lib/jvm/openjdk-25`.
 - Run a module: `cd <module> && ../mvnw spring-boot:run`
-- Required env: `ANTHROPIC_API_KEY` (all modules except `audio`); `OPENAI_API_KEY` for `image` and `audio`; `API_NINJAS_API_KEY` for `functions`
+- Required env: `ANTHROPIC_API_KEY` (all modules except `audio` and `mcp-server`); `OPENAI_API_KEY` for `image` and `audio`; `API_NINJAS_API_KEY` for `functions` and `mcp-server`
 - `rag` prod profile needs Milvus: `cd rag && docker compose up -d`, then run with `-Dspring-boot.run.profiles=prod`
 
 ## Layout
@@ -22,6 +22,8 @@ Root `pom.xml` is the parent: Spring Boot parent, Spring AI BOM (`spring-ai.vers
 | `image` | `POST /image`, `POST /vision` (multipart) | `OpenAiImageModel` (generation); Claude via `ChatClient` + `Media` (vision) |
 | `audio` | `POST /audio` | `TextToSpeechModel` (OpenAI `gpt-4o-mini-tts`) |
 | `chat-memory` | `POST /chat/{window\|vector}/{id}` (+ `/stream` SSE), `GET /chat/window/{id}`, `GET /chat/vector/{id}?query=`, `DELETE /chat/{type}/{id}` | `MessageChatMemoryAdvisor` over `JdbcChatMemoryRepository` vs `VectorStoreChatMemoryAdvisor` over PgVector + local ONNX embeddings; `SimpleLoggerAdvisor` at DEBUG. Postgres via Boot Docker Compose — only with `spring-boot:run`; the pgvector image needs the `org.springframework.boot.service-connection=postgres` label |
+| `mcp-server` | MCP over Streamable HTTP at `:8090/mcp` | `@McpTool` (`tool/`), `@McpResource` (`resource/`), `@McpPrompt` (`prompt/`), `McpSyncRequestContext`; `spring.ai.model.chat=none` (no LLM) |
+| `mcp-agent` | `POST /ask`, `POST /movies/{title}/ask`, `GET /weather-report` | MCP *host*: embedded MCP client (from `spring-ai-starter-mcp-client`) → `ToolCallbackProvider` via `ChatClient.defaultTools(...)`; `McpSyncClient` for resources/prompts. Needs `mcp-server` running |
 
 Package convention per module (`com.nazjara`): `rest/QuestionController`, `service/AiService` + `AiServiceImpl`, `model/` records (`Question`, `Answer`), `configuration/`, `bootstrap/`.
 
@@ -40,3 +42,4 @@ Package convention per module (`com.nazjara`): `rest/QuestionController`, `servi
 - Model names are set in each module's `application.properties` (`spring.ai.anthropic.chat.model`, no `.options` segment in Spring AI 2.0).
 - With both Anthropic and OpenAI starters on the classpath, select providers via `spring.ai.model.chat=anthropic` / `spring.ai.model.<type>=none` (see `image`, `audio`).
 - New feature = new module registered in root `<modules>`, following the layout above.
+- MCP naming: an app that calls MCP servers is named `*-agent`, never `*-client` or `*-host` (the MCP *client* is a component inside it; "host" reads like "server"). README's MCP section has the glossary.

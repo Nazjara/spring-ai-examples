@@ -25,6 +25,8 @@
         <module>image</module>
         <module>audio</module>
         <module>chat-memory</module>
+        <module>mcp-server</module>
+        <module>mcp-agent</module>
     </modules>
 
     <properties>

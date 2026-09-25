@@ -98,6 +98,69 @@ Features:
 
 PostgreSQL (with pgvector) is started automatically from `chat-memory/docker-compose.yml` by Spring Boot's Docker Compose support when run with `spring-boot:run` (Docker required).
 
+### MCP (Model Context Protocol)
+
+Two modules: `mcp-server` publishes capabilities over MCP (Streamable HTTP on `http://localhost:8090/mcp`), and `mcp-agent` — an agentic chat app — uses them through Claude.
+
+#### Terminology
+
+MCP defines three roles. Only two of them are separate applications here:
+
+| Role | What it is | In this repo |
+|---|---|---|
+| **Host** | The application the user talks to; it also calls the model. The spec calls it "host" — it is *not* a server. | `mcp-agent` (Claude Code and Claude Desktop are hosts too) |
+| **Client** | A connector *inside* the host, one per server. It only speaks MCP and never sees the user's question. | Not a module: Spring AI's `spring-ai-starter-mcp-client` creates it inside `mcp-agent` from `spring.ai.mcp.client.*` properties |
+| **Server** | Exposes tools, resources and prompts. | `mcp-server` |
+
+#### What happens on `POST /ask` "What's the weather in Lviv?"
+
+```mermaid
+sequenceDiagram
+    actor User
+    box mcp-agent (host)
+        participant App as Business logic (ChatClient)
+        participant Client as MCP client (embedded)
+    end
+    participant Claude
+    participant Server as mcp-server
+    participant Ninjas as API Ninjas
+
+    Note over Client,Server: 0. At startup: initialize handshake + tools/list
+    Client->>Server: initialize, tools/list
+    Server-->>Client: [currentWeather + input schema]
+    User->>App: 1. question
+    App->>Claude: 2. question + tool definitions
+    Claude-->>App: 3. tool call: currentWeather(Lviv, Ukraine)
+    App->>Client: 4. run tool (ToolCallingAdvisor)
+    Client->>Server: tools/call currentWeather
+    Server->>Ninjas: GET /v1/weather
+    Ninjas-->>Server: weather JSON
+    Server-->>Client: tool result
+    Client-->>App: tool result
+    App->>Claude: 5. tool result
+    Claude-->>App: final answer
+    App-->>User: answer
+```
+
+The model never contacts `mcp-server`: it only *asks* the host to call a tool. Claude decides whether and with which arguments, based on the tool's description; the host executes the call.
+
+#### Modules
+
+`mcp-server` (no model, no Anthropic key; needs `API_NINJAS_API_KEY`):
+- **Tool** `currentWeather` (`@McpTool`) — chosen by the model; uses `McpSyncRequestContext` to send log notifications back to the client
+- **Resources** `movies://titles` and template `movies://{title}` (`@McpResource`) — chosen by the application
+- **Prompt** `weather-report` (`@McpPrompt`) — a server-provided prompt template, chosen by the user
+
+`mcp-agent` (start `mcp-server` first):
+- Remote MCP tools registered on `ChatClient` like local tools
+- Reads a resource and attaches it as context
+- Fetches a server prompt and runs it
+
+The server works with any MCP host, e.g. Claude Code:
+```
+claude mcp add --transport http spring-ai-examples http://localhost:8090/mcp
+```
+
 ## Usage
 
 Each module can be run independently:
@@ -197,4 +260,20 @@ POST /chat/{memoryType}/{conversationId}/stream   # same body, streamed as text/
 GET /chat/window/{conversationId}                 # window: the history resent on each request
 GET /chat/vector/{conversationId}?query=name      # vector: what would be recalled for this query
 DELETE /chat/{memoryType}/{conversationId}        # forget the conversation
+```
+
+### MCP Agent
+
+```
+POST /ask
+Content-Type: application/json
+
+{
+  "question": "What's the weather in Lviv, Ukraine?"
+}
+```
+
+```
+POST /movies/Avatar/ask                             # body {"question": "..."}; answered from the movies://Avatar resource
+GET /weather-report?city=Lviv&country=Ukraine       # runs the server's weather-report prompt
 ```
