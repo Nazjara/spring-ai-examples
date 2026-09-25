@@ -161,6 +161,18 @@ The server works with any MCP host, e.g. Claude Code:
 claude mcp add --transport http spring-ai-examples http://localhost:8090/mcp
 ```
 
+### Agentic Tools
+
+A travel agent over 15 `@Tool` methods (fake, deterministic data — no external APIs), showing Spring AI 2.0's tool-calling features:
+
+- **Tool loop** — `ChatClient` auto-registers `ToolCallingAdvisor`, which keeps calling the model and running requested tools until it answers
+- **Tool search** — `ToolSearchToolCallingAdvisor` sends the model a single search tool instead of all 15 definitions; matching tools are revealed on demand (compare token usage with `toolSearch=false|true`)
+- **Tool call limits** — `spring.ai.tools.limits.*` caps calls per tool and per request
+- **`ToolContext`** — the user id reaches booking tools without ever being shown to the model
+- **`StructuredOutputValidationAdvisor`** — validates the model's JSON against the `TripPlan` schema and retries with the errors
+
+Its tests run **without an API key**: a stub model shows that tool search sends 1 tool definition instead of 15, and walks one iteration of the tool loop.
+
 ## Usage
 
 Each module can be run independently:
@@ -276,4 +288,20 @@ Content-Type: application/json
 ```
 POST /movies/Avatar/ask                             # body {"question": "..."}; answered from the movies://Avatar resource
 GET /weather-report?city=Lviv&country=Ukraine       # runs the server's weather-report prompt
+```
+
+### Agentic Tools
+
+```
+POST /ask?toolSearch=true
+Content-Type: application/json
+X-User-Id: alice
+
+{
+  "question": "Find a flight from Kyiv to Lisbon on 2026-10-10 and book the cheapest one"
+}
+```
+
+```
+POST /plan                                          # body {"question": "3 days in Lisbon from 2026-10-10, flying from Kyiv"}; returns a validated TripPlan
 ```
