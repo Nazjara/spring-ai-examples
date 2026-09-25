@@ -8,14 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class OpenAIServiceImplTest {
+class AiServiceImplTest {
 
     @Autowired
-    OpenAIServiceImpl openAIService;
+    AiServiceImpl aiService;
 
     @Test
     void testGetAnswer() {
-        var answer = openAIService.getAnswer(new Question("Give me a dad joke"));
+        var answer = aiService.getAnswer(new Question("Give me a dad joke"));
         assertThat(answer.answer()).isNotBlank();
     }
 }

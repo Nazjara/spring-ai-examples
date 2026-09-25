@@ -15,12 +15,12 @@ import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-public class OpenAIServiceImpl implements OpenAIService {
+public class AiServiceImpl implements AiService {
 
   private final ChatClient chatClient;
   private final OpenAiImageModel imageClient;
 
-  public OpenAIServiceImpl(ChatClient.Builder chatClientBuilder, OpenAiImageModel imageClient) {
+  public AiServiceImpl(ChatClient.Builder chatClientBuilder, OpenAiImageModel imageClient) {
     this.chatClient = chatClientBuilder.build();
     this.imageClient = imageClient;
   }

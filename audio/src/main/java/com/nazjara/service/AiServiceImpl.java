@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class OpenAIServiceImpl implements OpenAIService {
+public class AiServiceImpl implements AiService {
 
   private final TextToSpeechModel speechModel;
 

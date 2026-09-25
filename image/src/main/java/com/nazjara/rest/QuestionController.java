@@ -1,7 +1,7 @@
 package com.nazjara.rest;
 
 import com.nazjara.model.Question;
-import com.nazjara.service.OpenAIService;
+import com.nazjara.service.AiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,15 +20,15 @@ import static org.springframework.util.MimeTypeUtils.IMAGE_PNG_VALUE;
 @RequiredArgsConstructor
 public class QuestionController {
 
-	private final OpenAIService openAIService;
+	private final AiService aiService;
 
 	@PostMapping(value = "/image", produces = IMAGE_PNG_VALUE)
 	public byte[] getImage(@RequestBody Question question) {
-		return openAIService.getImage(question);
+		return aiService.getImage(question);
 	}
 
 	@PostMapping(value = "/vision", consumes = MULTIPART_FORM_DATA_VALUE, produces = APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> upload(@RequestParam MultipartFile file) throws IOException {
-		return ResponseEntity.ok(openAIService.getDescription(file));
+		return ResponseEntity.ok(aiService.getDescription(file));
 	}
 }

@@ -16,12 +16,12 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OpenAIServiceImpl implements OpenAIService {
+public class AiServiceImpl implements AiService {
 
   private final ChatClient chatClient;
   private final VectorStore vectorStore;
 
-  public OpenAIServiceImpl(ChatClient.Builder chatClientBuilder, VectorStore vectorStore) {
+  public AiServiceImpl(ChatClient.Builder chatClientBuilder, VectorStore vectorStore) {
     this.chatClient = chatClientBuilder.build();
     this.vectorStore = vectorStore;
   }

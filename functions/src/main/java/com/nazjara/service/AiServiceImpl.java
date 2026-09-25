@@ -15,12 +15,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OpenAIServiceImpl implements OpenAIService {
+public class AiServiceImpl implements AiService {
 
 	private final ChatClient chatClient;
 	private final ToolCallback weatherToolCallback;
 
-	public OpenAIServiceImpl(ChatClient.Builder chatClientBuilder, @Value("${api-ninjas.api-key}") String apiNinjasApiKey) {
+	public AiServiceImpl(ChatClient.Builder chatClientBuilder, @Value("${api-ninjas.api-key}") String apiNinjasApiKey) {
 		this.chatClient = chatClientBuilder.build();
 		this.weatherToolCallback = FunctionToolCallback
 				.builder("currentWeather", new WeatherServiceFunction(apiNinjasApiKey))

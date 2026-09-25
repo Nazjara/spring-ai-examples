@@ -13,11 +13,11 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OpenAIServiceImpl implements OpenAIService {
+public class AiServiceImpl implements AiService {
 
 	private final ChatClient chatClient;
 
-	public OpenAIServiceImpl(ChatClient.Builder chatClientBuilder) {
+	public AiServiceImpl(ChatClient.Builder chatClientBuilder) {
 		this.chatClient = chatClientBuilder.build();
 	}
 

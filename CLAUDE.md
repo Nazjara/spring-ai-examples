@@ -22,7 +22,7 @@ Root `pom.xml` is the parent: Spring Boot parent, Spring AI BOM (`spring-ai.vers
 | `image` | `POST /image`, `POST /vision` (multipart) | `OpenAiImageModel` (generation); Claude via `ChatClient` + `Media` (vision) |
 | `audio` | `POST /audio` | `TextToSpeechModel` (OpenAI `gpt-4o-mini-tts`) |
 
-Package convention per module (`com.nazjara`): `rest/QuestionController`, `service/OpenAIService` + `OpenAIServiceImpl`, `model/` records (`Question`, `Answer`), `configuration/`, `bootstrap/`.
+Package convention per module (`com.nazjara`): `rest/QuestionController`, `service/AiService` + `AiServiceImpl`, `model/` records (`Question`, `Answer`), `configuration/`, `bootstrap/`.
 
 ## RAG specifics
 
