@@ -51,7 +51,7 @@ public class VectorStoreConfig {
 				log.debug("Loading document: {}", document.getFilename());
 				var documentReader = new TikaDocumentReader(document);
 				var docs = documentReader.get();
-				var textSplitter = new TokenTextSplitter();
+				var textSplitter = TokenTextSplitter.builder().build();
 				var splitDocs = textSplitter.apply(docs);
 				vectorStore.add(splitDocs);
 			});

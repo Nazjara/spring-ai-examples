@@ -26,7 +26,7 @@ public interface AiService {
 	 * Builds a structured multi-day trip plan. The model gathers data with tools, and its
 	 * JSON output is validated against the {@link TripPlan} schema, with automatic retries.
 	 *
-	 * @param question trip request, e.g. "3 days in Lisbon from 2026-10-10, flying from Kyiv"
+	 * @param question trip request, e.g. "3 days in Lisbon from 2026-10-10, flying from Cluj-Napoca"
 	 * @return the validated plan
 	 */
 	TripPlan plan(Question question);

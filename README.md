@@ -305,12 +305,12 @@ Content-Type: application/json
 X-User-Id: alice
 
 {
-  "question": "Find a flight from Kyiv to Lisbon on 2026-10-10 and book the cheapest one"
+  "question": "Find a flight from Cluj-Napoca to Lisbon on 2026-10-10 and book the cheapest one"
 }
 ```
 
 ```
-POST /plan                                          # body {"question": "3 days in Lisbon from 2026-10-10, flying from Kyiv"}; returns a validated TripPlan
+POST /plan                                          # body {"question": "3 days in Lisbon from 2026-10-10, flying from Cluj-Napoca"}; returns a validated TripPlan
 ```
 
 ### Observability & Evaluation
