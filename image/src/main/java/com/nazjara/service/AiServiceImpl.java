@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
  * {@link AiService} using two providers side by side:
  * <ul>
  *   <li>Generation — {@link OpenAiImageModel} (DALL·E 3); Anthropic has no image
- *       generation API. The image comes back Base64-encoded and is decoded to bytes.</li>
+ *       generation API as of Sep 2026. The image comes back Base64-encoded and is decoded to bytes.</li>
  *   <li>Understanding — Claude via {@link ChatClient}: the image travels as
  *       {@link Media} attached to a {@link UserMessage}, next to the text prompt.</li>
  * </ul>

@@ -16,7 +16,7 @@ Root `pom.xml` is the parent: Spring Boot parent, Spring AI BOM (`spring-ai.vers
 | Module | Entry points | Spring AI surface |
 |---|---|---|
 | `basics` | `POST /ask`, `GET /capital?country=`, `GET /capital/details?country=`, `GET /capitals?region=` | `ChatClient`, `.st` templates via `.user(u -> u.text(resource).param(...))`, structured output via `.entity(...)` (record, `ParameterizedTypeReference<List<…>>`) |
-| `prompt-engineering` | none — JUnit tests only | `ChatClient` via `BaseTestClass.chat(...)` |
+| `prompt-engineering` | none — JUnit tests only (live Sonnet 5 calls) | Current-practice prompting: system prompt + instruction hierarchy, XML-tagged documents-first prompts, native structured output (`entity(..., spec -> spec.useProviderStructuredOutput())`), few-shot as message pairs, adaptive thinking + `effort` (`AnthropicChatOptions`), prompt caching (`AnthropicCacheOptions`). No legacy techniques (CoT prompting, temperature, format-in-prose) — they're superseded by API features |
 | `rag` | `POST /ask` | `VectorStore` (`SimpleVectorStore` default, Milvus under `prod`), local ONNX `EmbeddingModel` (all-MiniLM-L6-v2, 384 dims), `TikaDocumentReader`, `TokenTextSplitter` |
 | `functions` | `POST /weather` | `FunctionToolCallback` wrapping `WeatherServiceFunction` (api-ninjas) |
 | `image` | `POST /image`, `POST /vision` (multipart) | `OpenAiImageModel` (generation); Claude via `ChatClient` + `Media` (vision) |
